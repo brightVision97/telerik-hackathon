@@ -49,7 +49,7 @@ public class CustomAdapter extends BaseAdapter {
 
         name.setText(contacts.get(position).getName());
         number.setText(contacts.get(position).getNumber());
-        number.setText(contacts.get(position).getAddress());
+        address.setText(contacts.get(position).getAddress());
 
         return view;
     }

@@ -38,6 +38,11 @@ dependencies {
 
     implementation 'com.karumi:dexter:4.2.0'
 
+<<<<<<< HEAD
+=======
+    implementation 'com.android.support:design:28.0.0'
+
+>>>>>>> dbae5ad21d3a683c4eab3a33d039c874bbe6f4a8
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
