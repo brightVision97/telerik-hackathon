@@ -12,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.nekr0s.hackathon.adapter.CustomAdapter;
+import com.example.nekr0s.hackathon.models.Contact;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,23 +30,22 @@ public class ContactsActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.lv_contacts);
         enableRuntimePermission();
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+        CustomAdapter arrayAdapter = new CustomAdapter(
                 ContactsActivity.this,
-                R.layout.contacts_listview,
-                R.id.textView,
                 getContacts()
         );
 
         listView.setAdapter(arrayAdapter);
     }
 
-    private List<String> getContacts() {
-        ArrayList<String> contacts = new ArrayList<>();
+    private List<Contact> getContacts() {
+        ArrayList<Contact> contacts = new ArrayList<>();
         Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            contacts.add(name + " " + ":" + " " + phoneNumber);
+            String address = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
+            contacts.add(new Contact(name, phoneNumber, address));
         }
         cursor.close();
 
