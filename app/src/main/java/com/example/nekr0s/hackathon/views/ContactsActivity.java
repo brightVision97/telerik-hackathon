@@ -1,4 +1,4 @@
-package com.example.nekr0s.hackathon;
+package com.example.nekr0s.hackathon.views;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.*;
 
+import com.example.nekr0s.hackathon.Constants;
+import com.example.nekr0s.hackathon.R;
 import com.example.nekr0s.hackathon.adapter.CustomAdapter;
 import com.example.nekr0s.hackathon.models.Contact;
 import com.google.android.gms.common.ConnectionResult;

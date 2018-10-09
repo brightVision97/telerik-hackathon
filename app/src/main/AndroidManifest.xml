@@ -40,7 +40,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCeHntwRqhH3g99sF-Jjdh4cS4rnWplrCA" />
 
-        <activity android:name=".ContactsActivity">
+        <activity android:name=".views.ContactsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MapActivity" />
+        <activity android:name=".views.MapActivity" />
     </application>
 
 </manifest>
