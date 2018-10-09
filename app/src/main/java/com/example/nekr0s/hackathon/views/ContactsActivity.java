@@ -83,6 +83,7 @@ public class ContactsActivity extends AppCompatActivity
             contacts.add(new Contact(name, phoneNumber, address));
         }
         cursor.close();
+        
         return contacts;
     }
     
@@ -100,6 +101,7 @@ public class ContactsActivity extends AppCompatActivity
                     ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
         }
         addresses.close();
+        
         return emailToReturn;
     }
     
