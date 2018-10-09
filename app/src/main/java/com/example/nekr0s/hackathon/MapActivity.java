@@ -67,7 +67,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
     
-        geoLocate("Sofia, Bulgaria");
+        geoLocate(getIntent().getStringExtra(Constants.LOCATION_NAME_DATA_EXTRA));
     }
     
     private void moveCamera(LatLng latLng, String title)
