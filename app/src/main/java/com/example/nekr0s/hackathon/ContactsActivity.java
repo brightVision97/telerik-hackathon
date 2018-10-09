@@ -13,14 +13,16 @@ import android.widget.*;
 
 import com.example.nekr0s.hackathon.adapter.CustomAdapter;
 import com.example.nekr0s.hackathon.models.Contact;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ContactsActivity extends AppCompatActivity
 {
-    
-    public static final int REQUEST_PERMISSION_CODE = 1;
+    private static final int REQUEST_PERMISSION_CODE = 1;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,6 +31,7 @@ public class ContactsActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         
         ListView listView = findViewById(R.id.lv_contacts);
+        
         enableRuntimePermission();
         
         CustomAdapter arrayAdapter = new CustomAdapter(
@@ -39,20 +42,31 @@ public class ContactsActivity extends AppCompatActivity
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener((parent, view, position, id) ->
         {
-            Contact contact = (Contact) arrayAdapter.getItem(position);
+            Contact contact = getContacts().get(position);
             String address = contact.getAddress();
             
-            Intent intent = new Intent(ContactsActivity.this, MapActivity.class);
-            intent.putExtra("address", address);
-            startActivity(intent);
+            Intent intent = new Intent(this, MapActivity.class);
+            intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, address);
+            
+            int serviceAvailability =
+                    GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+            
+            if (serviceAvailability == ConnectionResult.SUCCESS)
+                startActivity(intent);
+            else
+                Toast.makeText(getApplicationContext(),
+                        "Map requests currently unavailable",
+                        Toast.LENGTH_LONG)
+                        .show();
         });
     }
     
     private List<Contact> getContacts()
     {
         ArrayList<Contact> contacts = new ArrayList<>();
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (cursor.moveToNext())
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null, null, null, null);
+        while (Objects.requireNonNull(cursor).moveToNext())
         {
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -62,7 +76,6 @@ public class ContactsActivity extends AppCompatActivity
         cursor.close();
         
         return contacts;
-        
     }
     
     private void enableRuntimePermission()
@@ -71,7 +84,10 @@ public class ContactsActivity extends AppCompatActivity
                 ContactsActivity.this,
                 Manifest.permission.READ_CONTACTS))
         {
-            Toast.makeText(ContactsActivity.this, "CONTACTS permission allows us to Access CONTACTS app", Toast.LENGTH_LONG).show();
+            Toast.makeText(ContactsActivity.this,
+                    "CONTACTS permission allows us to Access CONTACTS app",
+                    Toast.LENGTH_LONG)
+                    .show();
         } else
         {
             ActivityCompat.requestPermissions(ContactsActivity.this, new String[]{
