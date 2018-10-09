@@ -70,7 +70,7 @@ public class ContactsActivity extends AppCompatActivity
     {
         ArrayList<Contact> contacts = new ArrayList<>();
         Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                null, null, null, null);
+                null, null, null, "display_name" + " ASC");
         
         while (Objects.requireNonNull(cursor).moveToNext())
         {
