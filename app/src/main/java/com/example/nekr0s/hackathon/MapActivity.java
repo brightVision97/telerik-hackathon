@@ -29,6 +29,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getLocationPermission();
         
         initializeMap();
+        
     }
     
     private void geoLocate(String locationName)
@@ -65,6 +66,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+    
+        geoLocate("Sofia, Bulgaria");
     }
     
     private void moveCamera(LatLng latLng, String title)
