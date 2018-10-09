@@ -30,11 +30,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+<<<<<<< HEAD
 public class ContactsActivity extends AppCompatActivity implements ContactsAdapter.onContactClickListener {
     @BindView(R.id.rv_contacts)
     RecyclerView recyclerView;
     private GridLayoutManager mContactsViewLayoutManager;
 
+=======
+public class ContactsActivity extends AppCompatActivity
+{
+    @BindView(R.id.lv_contacts)
+    ListView mContactsListView;
+    
+>>>>>>> dfbe87f05d457ebf15db91232b9b39027c6eafc9
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -44,6 +52,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
         ButterKnife.bind(this);
         
         getContactsPermission();
+<<<<<<< HEAD
 
         ContactsAdapter contactsAdapter = new ContactsAdapter(getContacts());
 
@@ -72,42 +81,67 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
 //                        Toast.LENGTH_LONG)
 //                        .show();
 //        });
+=======
+        
+        CustomAdapter arrayAdapter = new CustomAdapter(this, getContacts());
+        
+        mContactsListView.setAdapter(arrayAdapter);
+        mContactsListView.setOnItemClickListener((parent, view, position, id) ->
+        {
+            String address = getContacts().get(position)
+                    .getAddress();
+            
+            Intent intent = new Intent(this, MapActivity.class);
+            intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, address);
+            
+            int serviceAvailability =
+                    GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+            
+            if (serviceAvailability == ConnectionResult.SUCCESS)
+                startActivity(intent);
+            else
+                Toast.makeText(getApplicationContext(),
+                        "Map requests currently unavailable",
+                        Toast.LENGTH_LONG)
+                        .show();
+        });
+>>>>>>> dfbe87f05d457ebf15db91232b9b39027c6eafc9
     }
     
     private List<Contact> getContacts()
     {
         ArrayList<Contact> contacts = new ArrayList<>();
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                null, null, null, null);
-        
-        while (Objects.requireNonNull(cursor).moveToNext())
+        try (Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null, null, null, "display_name" + " ASC"))
         {
-            String name = cursor.getString(cursor.getColumnIndex(
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = cursor.getString(cursor.getColumnIndex(
-                    ContactsContract.CommonDataKinds.Phone.NUMBER));
-            String address = findAddress(cursor.getString(cursor.getColumnIndex(
-                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
-            contacts.add(new Contact(name, phoneNumber, address));
+            while (Objects.requireNonNull(cursor).moveToNext())
+            {
+                String name = cursor.getString(cursor.getColumnIndex(
+                        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                String phoneNumber = cursor.getString(cursor.getColumnIndex(
+                        ContactsContract.CommonDataKinds.Phone.NUMBER));
+                String address = findAddress(cursor.getString(cursor.getColumnIndex(
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
+                contacts.add(new Contact(name, phoneNumber, address));
+            }
         }
-        cursor.close();
+        
         return contacts;
     }
     
     private String findAddress(String contactId)
     {
         String emailToReturn = null;
-        Cursor addresses = getContentResolver().query(
-                ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
-                null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID +
-                        " = " + contactId,
-                null, null);
-        while (Objects.requireNonNull(addresses).moveToNext())
+        try (Cursor addresses = getContentResolver().query(
+                ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, null,
+                ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID +
+                        " = " + contactId, null, null))
         {
-            emailToReturn = addresses.getString(addresses.getColumnIndex(
-                    ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
+            while (Objects.requireNonNull(addresses).moveToNext())
+                emailToReturn = addresses.getString(addresses.getColumnIndex(
+                        ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
         }
-        addresses.close();
+        
         return emailToReturn;
     }
     

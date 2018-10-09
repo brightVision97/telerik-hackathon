@@ -39,7 +39,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         initializeMap();
     }
     
-    private void geoLocate(String locationName)
+    private void geoLocate(final String locationName)
     {
         Geocoder geocoder = new Geocoder(MapActivity.this);
         List<Address> list = new ArrayList<>();
@@ -52,13 +52,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
         
-        if (list.size() > 0)
+        if (list.isEmpty())
         {
-            Address address = list.get(0);
-            
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),
-                    address.getAddressLine(0));
+            Toast.makeText(getApplicationContext(),
+                    "The contact has no address",
+                    Toast.LENGTH_SHORT)
+                    .show();
+            return;
         }
+        
+        Address address = list.get(0);
+        
+        moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),
+                address.getAddressLine(0));
     }
     
     @Override
