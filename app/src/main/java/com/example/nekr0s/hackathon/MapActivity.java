@@ -29,8 +29,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getLocationPermission();
         
         initializeMap();
-        
-        geoLocate("Bulgaria");
     }
     
     private void geoLocate(String locationName)
