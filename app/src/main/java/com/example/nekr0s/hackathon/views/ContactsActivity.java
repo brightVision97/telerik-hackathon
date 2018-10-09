@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.*;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.nekr0s.hackathon.Constants;
 import com.example.nekr0s.hackathon.R;
+import com.example.nekr0s.hackathon.adapter.ContactsAdapter;
 import com.example.nekr0s.hackathon.adapter.CustomAdapter;
 import com.example.nekr0s.hackathon.models.Contact;
 import com.google.android.gms.common.ConnectionResult;
@@ -27,11 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ContactsActivity extends AppCompatActivity
-{
-    @BindView(R.id.lv_contacts)
-    ListView listView;
-    
+public class ContactsActivity extends AppCompatActivity implements ContactsAdapter.onContactClickListener {
+    @BindView(R.id.rv_contacts)
+    RecyclerView recyclerView;
+    private GridLayoutManager mContactsViewLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -41,29 +44,34 @@ public class ContactsActivity extends AppCompatActivity
         ButterKnife.bind(this);
         
         getContactsPermission();
-        
-        CustomAdapter arrayAdapter = new CustomAdapter(this, getContacts());
-        
-        listView.setAdapter(arrayAdapter);
-        listView.setOnItemClickListener((parent, view, position, id) ->
-        {
-            Contact contact = getContacts().get(position);
-            String address = contact.getAddress();
-            
-            Intent intent = new Intent(this, MapActivity.class);
-            intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, address);
-            
-            int serviceAvailability =
-                    GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
-            
-            if (serviceAvailability == ConnectionResult.SUCCESS)
-                startActivity(intent);
-            else
-                Toast.makeText(getApplicationContext(),
-                        "Map requests currently unavailable",
-                        Toast.LENGTH_LONG)
-                        .show();
-        });
+
+        ContactsAdapter contactsAdapter = new ContactsAdapter(getContacts());
+
+        contactsAdapter.setOnContactClickListener(this);
+        recyclerView.setAdapter(contactsAdapter);
+
+        mContactsViewLayoutManager = new GridLayoutManager(this, 1);
+        recyclerView.setLayoutManager(mContactsViewLayoutManager);
+
+//        recyclerView.set((parent, view, position, id) ->
+//        {
+//            Contact contact = getContacts().get(position);
+//            String address = contact.getAddress();
+//
+//            Intent intent = new Intent(this, MapActivity.class);
+//            intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, address);
+//
+//            int serviceAvailability =
+//                    GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+//
+//            if (serviceAvailability == ConnectionResult.SUCCESS)
+//                startActivity(intent);
+//            else
+//                Toast.makeText(getApplicationContext(),
+//                        "Map requests currently unavailable",
+//                        Toast.LENGTH_LONG)
+//                        .show();
+//        });
     }
     
     private List<Contact> getContacts()
@@ -136,5 +144,24 @@ public class ContactsActivity extends AppCompatActivity
                 })
                 .onSameThread()
                 .check();
+    }
+
+    @Override
+    public void onClick(Contact contact) {
+        String address = contact.getAddress();
+
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, address);
+
+        int serviceAvailability =
+                GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+
+        if (serviceAvailability == ConnectionResult.SUCCESS)
+            startActivity(intent);
+        else
+            Toast.makeText(getApplicationContext(),
+                    "Map requests currently unavailable",
+                    Toast.LENGTH_LONG)
+                    .show();
     }
 }
