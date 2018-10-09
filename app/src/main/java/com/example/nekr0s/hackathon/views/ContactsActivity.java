@@ -65,16 +65,26 @@ public class ContactsActivity extends AppCompatActivity {
         ArrayList<Contact> contacts = new ArrayList<>();
         Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, null, null, null);
-        Cursor cursor2 = getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
-                null, null, null, null);
-        while (Objects.requireNonNull(cursor).moveToNext() && Objects.requireNonNull(cursor2).moveToNext()) {
+        while (Objects.requireNonNull(cursor).moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            String address = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
+            String address = findAddress(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
             contacts.add(new Contact(name, phoneNumber, address));
         }
         cursor.close();
         return contacts;
+    }
+
+    private String findAddress(String contactId) {
+        String emailToReturn = null;
+        Cursor addresses = getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
+                null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = " + contactId,
+                null, null);
+        while (addresses.moveToNext()){
+            emailToReturn = addresses.getString(addresses.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
+        }
+        addresses.close();
+        return emailToReturn;
     }
 
     private void enableRuntimePermission() {
