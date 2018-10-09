@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.*;
 
+import butterknife.BindView;
 import com.example.nekr0s.hackathon.Constants;
 import com.example.nekr0s.hackathon.R;
 import com.example.nekr0s.hackathon.adapter.CustomAdapter;
@@ -27,20 +28,18 @@ import java.util.Objects;
 
 public class ContactsActivity extends AppCompatActivity
 {
+    @BindView(R.id.lv_contacts)
+    ListView listView;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        ListView listView = findViewById(R.id.lv_contacts);
-        
         getContactsPermission();
         
-        CustomAdapter arrayAdapter = new CustomAdapter(
-                ContactsActivity.this,
-                getContacts()
-        );
+        CustomAdapter arrayAdapter = new CustomAdapter(this, getContacts());
         
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener((parent, view, position, id) ->
@@ -71,9 +70,12 @@ public class ContactsActivity extends AppCompatActivity
                 null, null, null, null);
 
         while (Objects.requireNonNull(cursor).moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            String address = findAddress(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
+            String name = cursor.getString(cursor.getColumnIndex(
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = cursor.getString(cursor.getColumnIndex(
+                    ContactsContract.CommonDataKinds.Phone.NUMBER));
+            String address = findAddress(cursor.getString(cursor.getColumnIndex(
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID)));
             contacts.add(new Contact(name, phoneNumber, address));
         }
         cursor.close();
@@ -82,11 +84,14 @@ public class ContactsActivity extends AppCompatActivity
 
     private String findAddress(String contactId) {
         String emailToReturn = null;
-        Cursor addresses = getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
-                null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = " + contactId,
+        Cursor addresses = getContentResolver().query(
+                ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
+                null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID +
+                        " = " + contactId,
                 null, null);
-        while (addresses.moveToNext()){
-            emailToReturn = addresses.getString(addresses.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
+        while (Objects.requireNonNull(addresses).moveToNext()) {
+            emailToReturn = addresses.getString(addresses.getColumnIndex(
+                    ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
         }
         addresses.close();
         return emailToReturn;
