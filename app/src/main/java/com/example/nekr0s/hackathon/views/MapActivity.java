@@ -39,7 +39,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         initializeMap();
     }
     
-    private void geoLocate(String locationName)
+    private void geoLocate(final String locationName)
     {
         Geocoder geocoder = new Geocoder(MapActivity.this);
         List<Address> list = new ArrayList<>();

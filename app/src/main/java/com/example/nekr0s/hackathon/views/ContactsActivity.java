@@ -30,7 +30,7 @@ import java.util.Objects;
 public class ContactsActivity extends AppCompatActivity
 {
     @BindView(R.id.lv_contacts)
-    ListView listView;
+    ListView mContactsListView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,8 +44,8 @@ public class ContactsActivity extends AppCompatActivity
         
         CustomAdapter arrayAdapter = new CustomAdapter(this, getContacts());
         
-        listView.setAdapter(arrayAdapter);
-        listView.setOnItemClickListener((parent, view, position, id) ->
+        mContactsListView.setAdapter(arrayAdapter);
+        mContactsListView.setOnItemClickListener((parent, view, position, id) ->
         {
             Contact contact = getContacts().get(position);
             String address = contact.getAddress();
