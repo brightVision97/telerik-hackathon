@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.*;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.example.nekr0s.hackathon.Constants;
 import com.example.nekr0s.hackathon.R;
 import com.example.nekr0s.hackathon.adapter.CustomAdapter;
@@ -36,6 +37,8 @@ public class ContactsActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        ButterKnife.bind(this);
         
         getContactsPermission();
         
@@ -68,8 +71,9 @@ public class ContactsActivity extends AppCompatActivity
         ArrayList<Contact> contacts = new ArrayList<>();
         Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, null, null, null);
-
-        while (Objects.requireNonNull(cursor).moveToNext()) {
+        
+        while (Objects.requireNonNull(cursor).moveToNext())
+        {
             String name = cursor.getString(cursor.getColumnIndex(
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = cursor.getString(cursor.getColumnIndex(
@@ -81,22 +85,24 @@ public class ContactsActivity extends AppCompatActivity
         cursor.close();
         return contacts;
     }
-
-    private String findAddress(String contactId) {
+    
+    private String findAddress(String contactId)
+    {
         String emailToReturn = null;
         Cursor addresses = getContentResolver().query(
                 ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
                 null, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID +
                         " = " + contactId,
                 null, null);
-        while (Objects.requireNonNull(addresses).moveToNext()) {
+        while (Objects.requireNonNull(addresses).moveToNext())
+        {
             emailToReturn = addresses.getString(addresses.getColumnIndex(
                     ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
         }
         addresses.close();
         return emailToReturn;
     }
-
+    
     private void getContactsPermission()
     {
         Dexter.withActivity(this)
