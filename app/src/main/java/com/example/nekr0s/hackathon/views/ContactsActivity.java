@@ -67,7 +67,7 @@ public class ContactsActivity extends AppCompatActivity {
                 null, null, null, null);
         Cursor cursor2 = getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
                 null, null, null, null);
-        while (Objects.requireNonNull(cursor).moveToNext() &&Objects.requireNonNull(cursor2).moveToNext()) {
+        while (Objects.requireNonNull(cursor).moveToNext() && Objects.requireNonNull(cursor2).moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             String address = cursor2.getString(cursor2.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
