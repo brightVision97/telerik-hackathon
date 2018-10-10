@@ -41,7 +41,7 @@ public class CustomAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (convertView == null)
-            view = inflater.inflate(R.layout.contacts_listview, null);
+            view = inflater.inflate(R.layout.contacts_listview_legacy, null);
         
         TextView name = view.findViewById(R.id.name);
         TextView number = view.findViewById(R.id.number);

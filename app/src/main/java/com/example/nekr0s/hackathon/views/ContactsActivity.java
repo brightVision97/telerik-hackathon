@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.*;
 
@@ -49,7 +49,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
         contactsAdapter.setOnContactClickListener(this);
         recyclerView.setAdapter(contactsAdapter);
     
-        GridLayoutManager mContactsViewLayoutManager = new GridLayoutManager(this, 1);
+        LinearLayoutManager mContactsViewLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mContactsViewLayoutManager);
     }
     
@@ -77,7 +77,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
     {
         ArrayList<Contact> contacts = new ArrayList<>();
         try (Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                null, null, null, "display_name" + " ASC"))
+                null, null, null, "display_name ASC"))
         {
             while (Objects.requireNonNull(cursor).moveToNext())
             {

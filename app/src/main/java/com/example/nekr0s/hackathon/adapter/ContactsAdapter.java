@@ -29,14 +29,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.contacts_item, parent, false);
-
-        int height = parent.getMeasuredHeight() / 5;
-
-        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-
-        layoutParams.height = height;
-        view.setLayoutParams(layoutParams);
-        view.setMinimumHeight(height);
+        
         return new ContactViewHolder(view);
     }
 
