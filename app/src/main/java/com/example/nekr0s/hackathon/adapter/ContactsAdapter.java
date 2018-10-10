@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.nekr0s.hackathon.R;
 import com.example.nekr0s.hackathon.models.Contact;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -19,16 +18,17 @@ import butterknife.OnClick;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>  {
     private List<Contact> mContacts;
-    private onContactClickListener mOnContactClickListener;
+    private OnContactClickListener mOnContactClickListener;
 
     public ContactsAdapter(List<Contact> contacts) {
         mContacts = contacts;
     }
 
+    @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.contacrs_item, parent, false);
+                .inflate(R.layout.contacts_item, parent, false);
 
         int height = parent.getMeasuredHeight() / 5;
 
@@ -63,11 +63,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         mContacts.addAll(contacts);
     }
 
-    public void setOnContactClickListener(onContactClickListener mOnContactClickListener) {
+    public void setOnContactClickListener(OnContactClickListener mOnContactClickListener) {
         this.mOnContactClickListener = mOnContactClickListener;
     }
 
-    public static class ContactViewHolder extends RecyclerView.ViewHolder{
+    public static class ContactViewHolder extends RecyclerView.ViewHolder {
+        
         @BindView(R.id.name)
         TextView mName;
 
@@ -78,9 +79,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         TextView mAddress;
 
         private Contact mContact;
-        private onContactClickListener mOnClickListener;
+        private OnContactClickListener mOnClickListener;
 
-        public ContactViewHolder(View view) {
+        ContactViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -98,12 +99,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             mOnClickListener.onClick(mContact);
         }
 
-        public void setOnContactClickListener(onContactClickListener onClickListener) {
+        void setOnContactClickListener(OnContactClickListener onClickListener) {
             mOnClickListener = onClickListener;
         }
     }
 
-    public interface onContactClickListener {
+    public interface OnContactClickListener {
         void onClick(Contact contact);
     }
 }

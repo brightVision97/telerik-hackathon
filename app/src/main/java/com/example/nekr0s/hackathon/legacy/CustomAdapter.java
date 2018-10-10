@@ -1,4 +1,4 @@
-package com.example.nekr0s.hackathon.adapter;
+package com.example.nekr0s.hackathon.legacy;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
