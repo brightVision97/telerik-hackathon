@@ -41,7 +41,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     
     private void geoLocate(final String locationName)
     {
-        Geocoder geocoder = new Geocoder(MapActivity.this);
+        Geocoder geocoder = new Geocoder(this);
         List<Address> list = new ArrayList<>();
         
         try
@@ -50,15 +50,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (IOException e)
         {
             e.printStackTrace();
-        }
-        
-        if (list.isEmpty())
-        {
-            Toast.makeText(getApplicationContext(),
-                    "The contact has no address",
-                    Toast.LENGTH_SHORT)
-                    .show();
-            return;
         }
         
         Address address = list.get(0);

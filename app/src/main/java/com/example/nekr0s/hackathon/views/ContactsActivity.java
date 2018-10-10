@@ -57,6 +57,15 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
     public void onClick(Contact contact)
     {
         String address = contact.getAddress();
+    
+        if (address == null)
+        {
+            Toast.makeText(getApplicationContext(),
+                    "The contact has no address",
+                    Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
         
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(Constants.LOCATION_NAME_DATA_EXTRA, address);
