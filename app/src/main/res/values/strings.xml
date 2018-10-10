@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hackathon</string>
+    <string name="app_name">name = null</string>
     <string name="name">Name:</string>
     <string name="number">Number:</string>
     <string name="address">Address:</string>
