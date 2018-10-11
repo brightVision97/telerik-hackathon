@@ -1,4 +1,4 @@
-package com.example.nekr0s.hackathon;
+package com.example.nekr0s.hackathon.utils;
 
 public class Constants
 {

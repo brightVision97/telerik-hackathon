@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.widget.Toast;
-import com.example.nekr0s.hackathon.Constants;
+import com.example.nekr0s.hackathon.utils.Constants;
 import com.example.nekr0s.hackathon.R;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
@@ -35,8 +35,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(com.example.nekr0s.hackathon.R.layout.activity_map);
         
         getLocationPermission();
-        
-        initializeMap();
     }
     
     private void geoLocate(final String locationName)
@@ -106,6 +104,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     {
                         if (report.areAllPermissionsGranted())
                         {
+                            initializeMap();
                             Toast.makeText(getApplicationContext(),
                                     "Permissions granted",
                                     Toast.LENGTH_SHORT)

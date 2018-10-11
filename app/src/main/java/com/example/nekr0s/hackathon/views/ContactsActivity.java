@@ -12,18 +12,17 @@ import android.widget.*;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.nekr0s.hackathon.Constants;
+import com.example.nekr0s.hackathon.utils.Constants;
 import com.example.nekr0s.hackathon.R;
 import com.example.nekr0s.hackathon.adapter.ContactsAdapter;
 import com.example.nekr0s.hackathon.models.Contact;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +41,16 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
         
         ButterKnife.bind(this);
         
-        getContactsPermission();
-        
+        getContactsPermissions();
+    }
+    
+    private void setAdapterAndLayoutManager()
+    {
         ContactsAdapter contactsAdapter = new ContactsAdapter(getContacts());
         
         contactsAdapter.setOnContactClickListener(this);
         recyclerView.setAdapter(contactsAdapter);
-    
+        
         LinearLayoutManager mContactsViewLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mContactsViewLayoutManager);
     }
@@ -57,7 +59,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
     public void onClick(Contact contact)
     {
         String address = contact.getAddress();
-    
+        
         if (address == null)
         {
             Toast.makeText(getApplicationContext(),
@@ -119,32 +121,33 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
         return emailToReturn;
     }
     
-    private void getContactsPermission()
+    private void getContactsPermissions()
     {
         Dexter.withActivity(this)
-                .withPermission(Manifest.permission.READ_CONTACTS)
-                .withListener(new PermissionListener()
+                .withPermissions(
+                        Manifest.permission.READ_CONTACTS,
+                        Manifest.permission.WRITE_CONTACTS)
+                .withListener(new MultiplePermissionsListener()
                 {
                     @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response)
+                    public void onPermissionsChecked(MultiplePermissionsReport report)
                     {
-                        Toast.makeText(getApplicationContext(),
-                                "Permission granted",
-                                Toast.LENGTH_SHORT)
-                                .show();
+                        if (report.areAllPermissionsGranted())
+                        {
+                            setAdapterAndLayoutManager();
+                            Toast.makeText(getApplicationContext(),
+                                    "Permissions granted",
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                        } else
+                            Toast.makeText(getApplicationContext(),
+                                    "Permissions denied",
+                                    Toast.LENGTH_SHORT)
+                                    .show();
                     }
                     
                     @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response)
-                    {
-                        Toast.makeText(getApplicationContext(),
-                                "Permission denied",
-                                Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                    
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission,
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions,
                                                                    PermissionToken token)
                     {
                         token.continuePermissionRequest();
