@@ -37,7 +37,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_contacts);
         
         ButterKnife.bind(this);
         
@@ -105,7 +105,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
         return contacts;
     }
     
-    private String findAddress(String contactId)
+    private String findAddress(final String contactId)
     {
         String emailToReturn = null;
         try (Cursor addresses = getContentResolver().query(
