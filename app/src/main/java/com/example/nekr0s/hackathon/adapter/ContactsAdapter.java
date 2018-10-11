@@ -52,17 +52,17 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         return mContacts.size();
     }
     
-    public Contact getItem(int position)
+    protected Contact getItem(int position)
     {
         return mContacts.get(position);
     }
     
-    public void clear()
+    protected void clear()
     {
         mContacts.clear();
     }
     
-    public void addAll(List<Contact> contacts)
+    protected void addAll(List<Contact> contacts)
     {
         mContacts.addAll(contacts);
     }
@@ -72,7 +72,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         this.mOnContactClickListener = mOnContactClickListener;
     }
     
-    public static class ContactViewHolder extends RecyclerView.ViewHolder
+    protected static class ContactViewHolder extends RecyclerView.ViewHolder
     {
         private IImageLoader mImageLoader;
         
@@ -95,7 +95,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         {
             super(view);
             ButterKnife.bind(this, view);
-            loadAvatarData();
         }
         
         void bind(Contact contact)
@@ -125,7 +124,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             mOnClickListener.onClick(mContact);
         }
         
-        void setOnContactClickListener(OnContactClickListener onClickListener)
+        private void setOnContactClickListener(OnContactClickListener onClickListener)
         {
             mOnClickListener = onClickListener;
         }
