@@ -1,6 +1,9 @@
 <resources>
+
     <string name="app_name">name = null</string>
     <string name="name">Name:</string>
     <string name="number">Number:</string>
     <string name="address">Address:</string>
+    <string name="title_activity_settings">Settings</string>
+
 </resources>

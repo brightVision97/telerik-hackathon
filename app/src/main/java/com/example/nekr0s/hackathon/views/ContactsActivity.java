@@ -31,7 +31,7 @@ import java.util.Objects;
 public class ContactsActivity extends AppCompatActivity implements ContactsAdapter.OnContactClickListener
 {
     @BindView(R.id.rv_contacts)
-    RecyclerView recyclerView;
+    RecyclerView mRecyclerView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,10 +49,10 @@ public class ContactsActivity extends AppCompatActivity implements ContactsAdapt
         ContactsAdapter contactsAdapter = new ContactsAdapter(getContacts());
         
         contactsAdapter.setOnContactClickListener(this);
-        recyclerView.setAdapter(contactsAdapter);
+        mRecyclerView.setAdapter(contactsAdapter);
         
         LinearLayoutManager mContactsViewLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mContactsViewLayoutManager);
+        mRecyclerView.setLayoutManager(mContactsViewLayoutManager);
     }
     
     @Override
